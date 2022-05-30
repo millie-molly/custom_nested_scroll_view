@@ -30,13 +30,11 @@ class Home extends StatelessWidget {
         length: 2,
         child: Scaffold(
           body: CustomNestedScrollView(
-              overscrollType: CustomOverscroll.outer,
-              physics: const BouncingScrollPhysics(
-                parent: AlwaysScrollableScrollPhysics(),
-              ),
+              physics: BouncingScrollPhysics(),
+              overscrollType: CustomOverscroll.inner,
               headerSliverBuilder: (context, innerScrolled) => <Widget>[
                     CustomSliverOverlapAbsorber(
-                      overscrollType: CustomOverscroll.outer,
+                      overscrollType: CustomOverscroll.inner,
                       handle:
                           CustomNestedScrollView.sliverOverlapAbsorberHandleFor(
                         context,
@@ -67,50 +65,50 @@ class Home extends StatelessWidget {
                   ],
               body: TabBarView(children: [
                 Center(
-                  child: CustomScrollView(
-                    physics: const BouncingScrollPhysics(
-                      parent: AlwaysScrollableScrollPhysics(),
-                    ),
-                    slivers: <Widget>[
-                      Builder(
-                        builder: (context) => CustomSliverOverlapInjector(
-                          overscrollType: CustomOverscroll.outer,
+                  child: Builder(
+                    builder: (context) => CustomScrollView(
+                      physics: BouncingScrollPhysics(),
+                      slivers: <Widget>[
+                        CustomSliverOverlapInjector(
+                          overscrollType: CustomOverscroll.inner,
                           handle: CustomNestedScrollView
                               .sliverOverlapAbsorberHandleFor(context),
                         ),
-                      ),
-                      SliverFixedExtentList(
-                        delegate: SliverChildBuilderDelegate(
-                          (_, index) => ListTile(
-                            key: Key('$index'),
-                            title: Center(
-                              child: Text('ListTile ${index + 1}'),
+                        SliverFixedExtentList(
+                          delegate: SliverChildBuilderDelegate(
+                            (_, index) => ListTile(
+                              key: Key('$index'),
+                              title: Center(
+                                child: Text('ListTile ${index + 1}'),
+                              ),
                             ),
+                            childCount: 30,
                           ),
-                          childCount: 30,
+                          itemExtent: 50,
                         ),
-                        itemExtent: 50,
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
                 ),
-                CustomScrollView(
-                  physics: NeverScrollableScrollPhysics(),
-                  slivers: <Widget>[
-                    Builder(
-                      builder: (context) => CustomSliverOverlapInjector(
-                        overscrollType: CustomOverscroll.outer,
-                        handle:
-                            NestedScrollViewY.sliverOverlapAbsorberHandleFor(
-                                context),
-                      ),
+                Center(
+                  child: Builder(
+                    builder: (context) => CustomScrollView(
+                      physics: NeverScrollableScrollPhysics(),
+                      slivers: <Widget>[
+                        CustomSliverOverlapInjector(
+                          overscrollType: CustomOverscroll.inner,
+                          handle:
+                              NestedScrollViewY.sliverOverlapAbsorberHandleFor(
+                                  context),
+                        ),
+                        SliverFillRemaining(
+                          child: Center(
+                            child: Text('Test'),
+                          ),
+                        ),
+                      ],
                     ),
-                    SliverFillRemaining(
-                      child: Center(
-                        child: Text('Test'),
-                      ),
-                    ),
-                  ],
+                  ),
                 ),
               ])),
         ));
